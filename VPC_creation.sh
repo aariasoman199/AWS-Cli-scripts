@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e  # Exit immediately if a command exits with a non-zero status
+set -e  
 
 echo "Creating VPC..."
 vpc_create=$(aws ec2 create-vpc --instance-tenancy "default" --cidr-block "172.16.0.0/16" --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=shopping}]')
