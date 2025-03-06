@@ -21,3 +21,11 @@ aws ec2 create-internet-gateway --tag-specifications '{"ResourceType":"internet-
 ```sh
 aws ec2 attach-internet-gateway --vpc-id "vpc-0d9326e8d536ea9e1" --internet-gateway-id "igw-0303d6e9933e0f81e"  
 ```
+### Creating Subnets
+```sh
+aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.0.0/18" --availability-zone-id "aps1-az1" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"public-subnet1"}]}' 
+
+aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.64.0/18" --availability-zone-id "aps1-az3" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"public-subnet2"}]}' 
+
+aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.128.0/18" --availability-zone-id "aps1-az2" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"private-subnet1"}]}' "  
+```
