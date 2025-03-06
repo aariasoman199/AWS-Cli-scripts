@@ -29,3 +29,44 @@ aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.64.0
 
 aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.128.0/18" --availability-zone-id "aps1-az2" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"private-subnet1"}]}' "  
 ```
+### Enable IPv4 on Public Subnets
+```sh
+aws ec2 modify-subnet-attribute --subnet-id "subnet-0970e30009665f52b" --map-public-ip-on-launch '{"Value":true}' 
+aws ec2 modify-subnet-attribute --subnet-id "subnet-09e42f63e7e52de29" --map-public-ip-on-launch '{"Value":true}'  
+```
+### Allocate Elastic IP
+```sh
+aws ec2 allocate-address --domain vpc  
+```
+### Creating NAT Gateway
+```sh
+aws ec2 create-nat-gateway --subnet-id "subnet-09e42f63e7e52de29" --allocation-id "eipalloc-0fd7bdfbe327b3a9f" --tag-specifications '{"ResourceType":"natgateway","Tags":[{"Key":"Name","Value":"shopping-nat"}]}' 
+```
+### Create Private Route Table
+```sh
+aws ec2 create-route-table --vpc-id "vpc-0d9326e8d536ea9e1" --tag-specifications '{"ResourceType":"route-table","Tags":[{"Key":"Name","Value":"shopping-private"}]}' 
+```
+### Adding NAT Gateway as Route
+```sh
+aws ec2 create-route --route-table-id "rtb-00a650b1a5ac2ca23" --destination-cidr-block "0.0.0.0/0" --nat-gateway-id "nat-02f28ece425300a2f" 
+```
+### Create public route table
+```sh
+aws ec2 create-route-table --vpc-id "vpc-0d9326e8d536ea9e1" --tag-specifications '{"ResourceType":"route-table","Tags":[{"Key":"Name","Value":"shopping-public"}]}'  
+```
+### Adding NAT Gateway as Route
+```sh
+aws ec2 create-route --route-table-id "rtb-00a650b1a5ac2ca23" --destination-cidr-block "0.0.0.0/0" --nat-gateway-id "nat-02f28ece425300a2f" 
+```
+### Adding Internet gateway to Public Route Table
+```sh
+aws ec2 create-route --route-table-id "rtb-063ebf39916bd6ae6" --destination-cidr-block "0.0.0.0/0" --gateway-id "igw-0303d6e9933e0f81e" 
+```
+### Associate Route Table
+```sh
+aws ec2 associate-route-table --subnet-id "subnet-0970e30009665f52b" --route-table-id "rtb-063ebf39916bd6ae6"
+aws ec2 associate-route-table --subnet-id "subnet-09e42f63e7e52de29" --route-table-id "rtb-063ebf39916bd6ae6"
+aws ec2 associate-route-table --subnet-id "subnet-0cf6f1065305ba39f" --route-table-id "rtb-00a650b1a5ac2ca23"
+```
+### Conclusion
+This guide provides a step-by-step process to create a fully functional Amazon VPC using AWS CLI. By following these commands, you can set up a secure and scalable network infrastructure tailored to your application's needs.
