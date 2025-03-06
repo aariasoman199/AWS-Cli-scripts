@@ -54,10 +54,6 @@ aws ec2 create-route --route-table-id "rtb-00a650b1a5ac2ca23" --destination-cidr
 ```sh
 aws ec2 create-route-table --vpc-id "vpc-0d9326e8d536ea9e1" --tag-specifications '{"ResourceType":"route-table","Tags":[{"Key":"Name","Value":"shopping-public"}]}'  
 ```
-### Adding NAT Gateway as Route
-```sh
-aws ec2 create-route --route-table-id "rtb-00a650b1a5ac2ca23" --destination-cidr-block "0.0.0.0/0" --nat-gateway-id "nat-02f28ece425300a2f" 
-```
 ### Adding Internet gateway to Public Route Table
 ```sh
 aws ec2 create-route --route-table-id "rtb-063ebf39916bd6ae6" --destination-cidr-block "0.0.0.0/0" --gateway-id "igw-0303d6e9933e0f81e" 
