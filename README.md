@@ -9,6 +9,10 @@ Using below commands we can set up a VPC using AWS CLI, including creating subne
 ```sh
 aws ec2 create-vpc --instance-tenancy "default" --cidr-block "172.16.0.0/16" --tag-specifications '{"ResourceType":"vpc","Tags":[{"Key":"Name","Value":"Shopping"}]}' 
 ```
+### Describe VPC ID
+```sh
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=Shopping" --query "Vpcs[*].VpcId" --output text
+```
 ### Enable DNS Hostnames
 ```sh
 aws ec2 modify-vpc-attribute --enable-dns-hostnames '{"Value":true}' --vpc-id "vpc-0d9326e8d536ea9e1" 
@@ -16,6 +20,10 @@ aws ec2 modify-vpc-attribute --enable-dns-hostnames '{"Value":true}' --vpc-id "v
 ### Internet Gateway Creation
 ```sh
 aws ec2 create-internet-gateway --tag-specifications '{"ResourceType":"internet-gateway","Tags":[{"Key":"Name","Value":"Shopping-igw"}]}'  
+```
+### Describe Internet Gateway ID
+```sh
+aws ec2 describe-internet-gateways --filters "Name=tag:Name,Values=Shopping-igw" --query "InternetGateways[*].InternetGatewayId" --output text
 ```
 ### Attach Internet Gateway to VPC
 ```sh
@@ -28,6 +36,10 @@ aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.0.0/
 aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.64.0/18" --availability-zone-id "aps1-az3" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"public-subnet2"}]}' 
 
 aws ec2 create-subnet --vpc-id "vpc-0d9326e8d536ea9e1" --cidr-block "172.16.128.0/18" --availability-zone-id "aps1-az2" --tag-specifications '{"ResourceType":"subnet","Tags":[{"Key":"Name","Value":"private-subnet1"}]}' "  
+```
+### Describe Subnet IDs
+```sh
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-0d9326e8d536ea9e1" --query "Subnets[*].{Name:Tags[?Key=='Name']|[0].Value, ID:SubnetId}" 
 ```
 ### Enable IPv4 on Public Subnets
 ```sh
